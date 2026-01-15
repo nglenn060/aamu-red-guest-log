@@ -9,48 +9,79 @@
 <body>
   <div class="header">
     <h1>Records</h1>
-    <p>Export to CSV (Spreadsheet)</p>
+    <p>Admin Access Required</p>
   </div>
 
   <div class="container">
-    <div class="card">
-      <label for="search">Search (name, agency, reason)</label>
-      <input id="search" placeholder="Start typing..." />
-      <p class="note" id="count"></p>
-    </div>
 
-    <div class="card">
-      <div class="row">
-        <button class="btn btn-gold" id="exportBtn" type="button">Export CSV</button>
-        <button class="btn btn-light" id="clearBtn" type="button">Clear All Records</button>
+    <!-- 🔐 PIN Gate -->
+    <div class="card" id="authWrap" style="display:none;">
+      <h2 style="margin:0 0 10px;">Enter PIN</h2>
+      <p class="note">This section is for staff/admin use.</p>
+
+      <label for="pinInput">Records PIN</label>
+      <input id="pinInput" type="password" inputmode="numeric" placeholder="Enter PIN" />
+
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary" id="pinBtn" type="button">Unlock Records</button>
       </div>
-      <p class="note">Exporting downloads a CSV that you can open in Excel or Google Sheets.</p>
+
+      <div id="pinAlert" class="alert" style="display:none;"></div>
+
+      <div class="row" style="margin-top:12px;">
+        <a class="btn btn-light" href="index.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Back</a>
+      </div>
     </div>
 
-    <div class="card table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Agency</th>
-            <th>Reason</th>
-            <th>Sign In</th>
-            <th>Sign Out</th>
-            <th>Auto</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
+    <!-- ✅ Records UI (hidden until unlocked) -->
+    <div id="recordsWrap" style="display:none;">
 
-    <div class="card">
-      <a class="btn btn-light" href="index.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Back</a>
+      <div class="card">
+        <div class="row">
+          <button class="btn btn-light" id="logoutBtn" type="button">Lock Records</button>
+          <a class="btn btn-light" href="index.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Back</a>
+        </div>
+        <p class="note">“Lock Records” hides data again until the PIN is entered.</p>
+      </div>
+
+      <div class="card">
+        <label for="search">Search (name, agency, reason)</label>
+        <input id="search" placeholder="Start typing..." />
+        <p class="note" id="count"></p>
+      </div>
+
+      <div class="card">
+        <div class="row">
+          <button class="btn btn-gold" id="exportBtn" type="button">Export CSV</button>
+          <button class="btn btn-light" id="clearBtn" type="button">Clear All Records</button>
+        </div>
+        <p class="note">Export downloads a CSV you can open in Excel or Google Sheets.</p>
+      </div>
+
+      <div class="card table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Agency</th>
+              <th>Reason</th>
+              <th>Sign In</th>
+              <th>Sign Out</th>
+              <th>Auto</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 
   <script src="assets/js/app.js"></script>
   <script>
-    window.AAMU_APP.initRecords();
+    document.addEventListener("DOMContentLoaded", () => {
+      window.AAMU_APP.initRecords();
+    });
   </script>
 </body>
 </html>

@@ -4,10 +4,17 @@
  - Records can be exported to CSV
  - Auto sign-out after 8 hours
  - Auto return to Home after successful Sign In / Sign Out
+ - Records page protected by a PIN/password gate (client-side)
 **************************************************************/
 
 const STORAGE_KEY = "aamu_red_guest_log_v1";
 const AUTO_SIGNOUT_HOURS = 8;
+
+// 🔐 Change this PIN to whatever you want:
+const RECORDS_PIN = "1875";
+
+// Session key: once unlocked, records page stays unlocked until tab/browser session ends
+const RECORDS_AUTH_KEY = "aamu_records_authed_session";
 
 // ---------- Helpers ----------
 function nowISO() {
@@ -130,6 +137,15 @@ function showAlert(el, msg, type) {
   el.style.display = "block";
 }
 
+// ---------- Records Auth Helpers ----------
+function isRecordsAuthed() {
+  return sessionStorage.getItem(RECORDS_AUTH_KEY) === "true";
+}
+
+function setRecordsAuthed(value) {
+  sessionStorage.setItem(RECORDS_AUTH_KEY, value ? "true" : "false");
+}
+
 // ---------- Page Init Hooks ----------
 function initHome() {
   ensureAutoSignOut();
@@ -186,7 +202,7 @@ function initSignIn() {
     records.push(record);
     saveLog(records);
 
-    showAlert(alertBox, "Signed in successfully. Returning to home screen...", "ok");
+    showAlert(document.getElementById("alert"), "Signed in successfully. Returning to home screen...", "ok");
 
     form.reset();
     reason.value = "Meeting";
@@ -238,6 +254,59 @@ function initSignOut() {
 function initRecords() {
   ensureAutoSignOut();
 
+  // Auth UI elements (must exist in records.html)
+  const authWrap = document.getElementById("authWrap");
+  const recordsWrap = document.getElementById("recordsWrap");
+  const pinInput = document.getElementById("pinInput");
+  const pinBtn = document.getElementById("pinBtn");
+  const pinAlert = document.getElementById("pinAlert");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const showAuth = () => {
+    authWrap.style.display = "block";
+    recordsWrap.style.display = "none";
+    if (pinAlert) pinAlert.style.display = "none";
+    pinInput.value = "";
+    pinInput.focus();
+  };
+
+  const showRecords = () => {
+    authWrap.style.display = "none";
+    recordsWrap.style.display = "block";
+    render(); // render table once unlocked
+  };
+
+  // If already unlocked this session, skip PIN
+  if (isRecordsAuthed()) {
+    showRecords();
+  } else {
+    showAuth();
+  }
+
+  // Handle PIN submit
+  const tryUnlock = () => {
+    const typed = (pinInput.value || "").trim();
+    if (typed === RECORDS_PIN) {
+      setRecordsAuthed(true);
+      showRecords();
+    } else {
+      showAlert(pinAlert, "Incorrect PIN. Please try again.", "err");
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  };
+
+  pinBtn.addEventListener("click", tryUnlock);
+  pinInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") tryUnlock();
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    setRecordsAuthed(false);
+    showAuth();
+  });
+
+  // Records page behavior
   const search = document.getElementById("search");
   const tbody = document.getElementById("tbody");
   const exportBtn = document.getElementById("exportBtn");
@@ -246,7 +315,7 @@ function initRecords() {
 
   const render = () => {
     ensureAutoSignOut();
-    const q = search.value.trim().toLowerCase();
+    const q = (search.value || "").trim().toLowerCase();
     const records = loadLog();
     const ordered = [...records].reverse();
 
@@ -279,9 +348,13 @@ function initRecords() {
     countEl.textContent = `${filtered.length} record(s) shown`;
   };
 
-  search.addEventListener("input", render);
+  search.addEventListener("input", () => {
+    if (!isRecordsAuthed()) return;
+    render();
+  });
 
   exportBtn.addEventListener("click", () => {
+    if (!isRecordsAuthed()) return;
     const records = loadLog();
     const csv = toCSV(records);
     const filename = `AAMU_RED_GuestLog_${new Date().toISOString().slice(0,10)}.csv`;
@@ -289,13 +362,12 @@ function initRecords() {
   });
 
   clearBtn.addEventListener("click", () => {
+    if (!isRecordsAuthed()) return;
     const ok = confirm("This will delete ALL records on this device/browser. Continue?");
     if (!ok) return;
     localStorage.removeItem(STORAGE_KEY);
     render();
   });
-
-  render();
 }
 
 window.AAMU_APP = {
