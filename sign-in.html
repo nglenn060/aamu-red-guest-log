@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign In - AAMU R.E.D.</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Sign In</h1>
+    <p>AAMU R.E.D.  Howard J. Foster</p>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <form id="signInForm">
+        <div class="grid two">
+          <div>
+            <label for="firstName">First Name</label>
+            <input id="firstName" autocomplete="given-name" />
+          </div>
+          <div>
+            <label for="lastName">Last Name</label>
+            <input id="lastName" autocomplete="family-name" />
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label for="agency">Agency / Institution</label>
+          <input id="agency" autocomplete="organization" />
+        </div>
+
+        <div style="margin-top:12px;">
+          <label for="reason">Reason</label>
+          <select id="reason">
+            <option>Meeting</option>
+            <option>Research Project</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div id="otherWrap" style="margin-top:12px; display:none;">
+          <label for="otherDetails">If Other, please specify</label>
+          <textarea id="otherDetails" placeholder="Type the reason..."></textarea>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button class="btn btn-primary" type="submit">Confirm Sign In</button>
+        </div>
+
+        <div id="alert" class="alert" style="display:none;"></div>
+
+        <p class="note">Time and date are automatically recorded.</p>
+
+        <div class="row" style="margin-top:12px;">
+          <a class="btn btn-light" href="index.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    window.AAMU_APP.initSignIn();
+  </script>
+</body>
+</html>

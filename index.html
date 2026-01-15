@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AAMU R.E.D. Guest Log</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>AAMU R.E.D. Guest Sign-In</h1>
+    <p>Howard J. Foster Research Center</p>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <h2 style="margin:0 0 10px;">Welcome</h2>
+      <p class="note">Select an option below. Guests are automatically signed out after 8 hours if they forget.</p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <a class="btn btn-primary" href="sign-in.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Sign In</a>
+        <a class="btn btn-primary" href="sign-out.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Sign Out</a>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <a class="btn btn-gold" href="records.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Records / Export CSV</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    window.AAMU_APP.initHome();
+  </script>
+</body>
+</html>

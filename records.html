@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Records - AAMU R.E.D.</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Records</h1>
+    <p>Export to CSV (Spreadsheet)</p>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <label for="search">Search (name, agency, reason)</label>
+      <input id="search" placeholder="Start typing..." />
+      <p class="note" id="count"></p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <button class="btn btn-gold" id="exportBtn" type="button">Export CSV</button>
+        <button class="btn btn-light" id="clearBtn" type="button">Clear All Records</button>
+      </div>
+      <p class="note">Exporting downloads a CSV that you can open in Excel or Google Sheets.</p>
+    </div>
+
+    <div class="card table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Agency</th>
+            <th>Reason</th>
+            <th>Sign In</th>
+            <th>Sign Out</th>
+            <th>Auto</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <a class="btn btn-light" href="index.html" style="text-decoration:none; text-align:center; line-height:1.2; padding-top:16px;">Back</a>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    window.AAMU_APP.initRecords();
+  </script>
+</body>
+</html>
